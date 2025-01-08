@@ -6,8 +6,8 @@ require('dotenv').config()
 const {sequelize}=require("./models")
 app.use(express.json());
 
-app.use("/",chefRouter)
-app.use("/protected/",chefProtectorMiddleware)
+app.use(process.env.PREFIX+"/",chefRouter)
+app.use(process.env.PREFIX+"/protected/",chefProtectorMiddleware)
 
 
 
