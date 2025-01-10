@@ -9,6 +9,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      chefId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Chefs',
+          key: 'id'
+        },
+        onDelete: 'CASCADE'
+      },
       title: {
         type: Sequelize.STRING
       },
