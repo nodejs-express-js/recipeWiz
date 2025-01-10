@@ -5,12 +5,14 @@ const chefProtectorMiddleware=require("./MiddleWare/chefProtectorMiddleware")
 require('dotenv').config()
 const {sequelize}=require("./models");
 const recipeRouter=require("./Routers/recipeRouter")
+const chefPublicInfoRouter=require("./Routers/chefPublicInfoController") 
 app.use(express.json());
 
 app.use(process.env.PREFIX+"/",chefRouter)
 
-app.use(process.env.PREFIX+"/protected/",chefProtectorMiddleware)
-app.use(process.env.PREFIX+"/protected/",recipeRouter)
+app.use(process.env.PREFIX,chefPublicInfoRouter)
+app.use(process.env.PREFIX+"/protected",chefProtectorMiddleware)
+app.use(process.env.PREFIX+"/protected",recipeRouter)
 
 
 

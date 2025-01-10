@@ -3,12 +3,8 @@ const {Chef,Recipe}=require("../models/")
 const getRecipes=async(req,res)=>{
 try{
     const recipes = await Recipe.findAll({
-        where: {
-            chefId: req.chefId, // Replace `id` with your specific value
-        },
         limit:10
       });
-    
     res.status(200).json(recipes)
 }
 catch(error){
@@ -24,7 +20,6 @@ const postRecipes=async(req,res)=>{
             return res.status(400).json({error:'Please provide all the required fields'})
         }
         const recipe=await Recipe.create({title,description,ingredients,instructions,image,chefId:req.chefId})
-        console.log(recipe)
         res.status(200).json(recipe)
     }
     catch(error){
