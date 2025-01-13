@@ -6,8 +6,9 @@ require('dotenv').config()
 const {sequelize}=require("./models");
 const recipeRouter=require("./Routers/recipeRouter")
 const chefPublicInfoRouter=require("./Routers/chefPublicInfoController") 
+const cors=require("cors")
 app.use(express.json());
-
+app.use(cors())
 app.use(process.env.PREFIX+"/",chefRouter)
 
 app.use(process.env.PREFIX,chefPublicInfoRouter)

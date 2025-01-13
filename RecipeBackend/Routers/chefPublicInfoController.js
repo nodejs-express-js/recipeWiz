@@ -11,8 +11,7 @@ chefPublicInfoRouter.get("/chefInfo",async(req,res)=>{
         res.status(200).json({id:id,firstName:chef.firstName,lastName:chef.lastName,profilepic:chef.profilepic})
     }
     catch(err){
-        console.error(err)
-        res.status(500).json({error:"Server Error"})
+        res.status(500).json({message:"Server Error"})
     }
 
 })

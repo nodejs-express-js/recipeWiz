@@ -1,0 +1,15 @@
+.container{
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.home{
+    cursor: pointer;
+}
+.signup{
+cursor: pointer;
+}
+.login{
+    cursor: pointer;
+}
