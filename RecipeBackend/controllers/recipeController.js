@@ -25,7 +25,7 @@ const postRecipes=async(req,res)=>{
     catch(error){
         console.error(error)
         res.status(500).json({error:"Server Error"})
-     }
+    }
 }
 
 module.exports ={getRecipes,postRecipes}
