@@ -30,6 +30,7 @@ const chefReducer=(state:chefStateType,action:actionType)=>{
             localStorage.setItem('chef', JSON.stringify(action.payload));
             return action.payload
         case 'LOGOUT':
+            localStorage.setItem('chef', JSON.stringify({ email: '', token: ''}));
             return { email: '', token: ''}
         default:
             return state
