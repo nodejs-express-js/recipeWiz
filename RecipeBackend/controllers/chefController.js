@@ -2,7 +2,8 @@ const { Chef } = require("../models");
 const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
 const validator=require("validator");
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, PutObjectCommand,GetObjectCommand } = require("@aws-sdk/client-s3");
+const {getSignedUrl }=require("@aws-sdk/s3-request-presigner");
 const { v4: uuidv4 } = require("uuid");
 require("dotenv").config()
 
@@ -13,7 +14,7 @@ const s3 = new S3Client({
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       },
   });
-
+const expirationTime = 60*60*24*process.env.EXPIRY_TIME;
 
 const signup=async(req,res)=>{
 try{
@@ -46,12 +47,16 @@ try{
         ContentType: req.file.mimetype, // Adjust for actual file type
       });
     const response = await s3.send(command);
-
-
     password=await encryptpassword(password);
     const chef=await Chef.create({firstName,lastName,email,password,profilepic:key})
+    const getcommand = new GetObjectCommand({
+        Bucket: process.env.BUCKET_NAME,
+        Key: key
+      });
+    
+    const url = await getSignedUrl(s3, getcommand, { expiresIn: expirationTime });
     const token=await generateToken(chef.id);
-    res.status(200).json({email:chef.email,token})
+    res.status(200).json({email:chef.email,token,profilepic:url});
 }
 catch(err){
     console.log(err)
@@ -72,12 +77,18 @@ const login=async(req,res)=>{
         if(!existschef){
             return res.status(401).json({message:'Invalid email or password'})
         }
+        const getcommand = new GetObjectCommand({
+            Bucket: process.env.BUCKET_NAME,
+            Key: existschef.profilepic
+          });
+          const url = await getSignedUrl(s3, getcommand, { expiresIn: expirationTime });
+
         const isMatch=await bcrypt.compare(password,existschef.password);
         if(!isMatch){
             return res.status(401).json({message:'Invalid email or password'})
         }
         const token=await generateToken(existschef.id);
-        res.status(200).json({email:existschef.email,token})
+        res.status(200).json({email:existschef.email,token,profilepic:url})
     }
     catch(err){
         res.status(500).json({message:err.message})

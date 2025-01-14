@@ -5,7 +5,7 @@ const getRecipes = async (req, res) => {
       const { num1, num2 } = req.body; // Assuming num1 and num2 are passed as query parameters
       const offset = parseInt(num1, 10); // Starting index for the range
       const limit = parseInt(num2, 10) - parseInt(num1, 10) + 1; // Calculate the number of recipes to fetch
-    console.log(req.body )
+      console.log(limit )
       if (isNaN(offset) || isNaN(limit) || offset < 0 || limit <= 0) {
         return res.status(400).json({ message: "Invalid range values" });
       }
@@ -21,8 +21,9 @@ const getRecipes = async (req, res) => {
           },
         ],
       });
-  
-  
+      for(let i=0;i<recipes.length;i++){
+        console.log(recipes[i].dataValues.chef.dataValues)
+      }
       res.status(200).json(recipes);
     } catch (error) {
         console.log(error);
