@@ -2,12 +2,22 @@ const { Chef } = require("../models");
 const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
 const validator=require("validator");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { v4: uuidv4 } = require("uuid");
+require("dotenv").config()
+
+const s3 = new S3Client({
+    region: process.env.AWS_REGION,
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      },
+  });
 
 
 const signup=async(req,res)=>{
 try{
     let {firstName,lastName,email,password}=req.body;
-    console.log(req.file)
     if(!firstName || !lastName || !email || !password ){
         return res.status(400).json({message:'Please provide all required fields'})
     }
@@ -27,13 +37,24 @@ try{
     if(existschef){
         return res.status(400).json({message:'Email already exists'})
     }
-   
+    const uniqueId = uuidv4();
+    const key = `${uniqueId}.jpg`;
+    const command = new PutObjectCommand({
+        Bucket: process.env.BUCKET_NAME,
+        Key: key,
+        Body: req.file.buffer,
+        ContentType: req.file.mimetype, // Adjust for actual file type
+      });
+    const response = await s3.send(command);
+
+
     password=await encryptpassword(password);
-    const chef=await Chef.create({firstName,lastName,email,password,profilepic})
+    const chef=await Chef.create({firstName,lastName,email,password,profilepic:key})
     const token=await generateToken(chef.id);
     res.status(200).json({email:chef.email,token})
 }
 catch(err){
+    console.log(err)
     res.status(500).json({message:err.message})
 }
 }
