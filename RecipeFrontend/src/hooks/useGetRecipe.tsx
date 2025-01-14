@@ -7,25 +7,35 @@ type Recipe = {
     ingredients: string;
     instructions: string;
     image: string;
-    createdAt: string; // ISO 8601 format
-    updatedAt: string; // ISO 8601 format
+    createdAt: string;
+    updatedAt: string;
     chefId: number;
-};
+    chef: {
+      id: number;
+      firstName: string;
+      lastName: string;
+      profilepic: string;
+    };
+  };
+  
 const useGetRecipe = () => {
   const [error,setError]=useState("")
   const [loading,setIsLoading] = useState(true)
   const {state}=useChef();
 
-  const getFewPosts=async():Promise<Recipe[]>=>{  
+  const getFewPosts=async(num1:number,num2:number):Promise<Recipe[]>=>{  
     setError("")
     setIsLoading(true)
     try{
         if(state.token){
-            const response=await fetch(import.meta.env.VITE_URL+"protected/recipe",{
-                method:"GET",
+            const response=await fetch(import.meta.env.VITE_URL+"protected/fetchrecipes",{
+                method:"POST",
                 headers:{
-                    Authorization: `Bearer ${state.token}`
-                }
+                    Authorization: `Bearer ${state.token}`,
+                    'Content-Type': 'application/json', // Specify JSON format
+                },  
+                
+                body: JSON.stringify({num1,num2})
             })
             const posts=await response.json();
             console.log(posts)
@@ -39,10 +49,10 @@ const useGetRecipe = () => {
         }
         else{
             setError("please login")
-            
         }
     }
-    catch{
+    catch(err){
+        console.log(err)
         setError("Failed to fetch data")
     }
     setIsLoading(false)

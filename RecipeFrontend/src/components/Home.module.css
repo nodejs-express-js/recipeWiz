@@ -1,0 +1,19 @@
+.onePost{
+background-color: wheat;
+width: 250px;
+margin: 1rem;
+}
+.postImage{
+    width:108px;
+    height:135px;
+}
+.userInfo{
+    display: flex;
+    background-color: red;
+    display: flex;
+    padding: 1rem;    
+}
+.name{
+    display: flex;
+    margin-left: 1rem;
+}
