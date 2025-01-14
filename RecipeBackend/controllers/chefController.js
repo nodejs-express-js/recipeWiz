@@ -7,20 +7,27 @@ const validator=require("validator");
 const signup=async(req,res)=>{
 try{
     let {firstName,lastName,email,password}=req.body;
+    console.log(req.file)
     if(!firstName || !lastName || !email || !password ){
         return res.status(400).json({message:'Please provide all required fields'})
     }
-    profilepic='';
     if(!validator.isEmail(email)){
         return res.status(400).json({message:'Invalid email format'})
     }
     if(validator.isStrongPassword(password)){
         return res.status(400).json({message:'Password must be at least 8 characters long and contain only alphanumeric characters'})
     }
+    if (req.file.size > 3 * 1024 * 1024) {
+        return res.status(400).json({ error: "File size exceeds 3MB limit." });
+    }
+    if (!["image/jpeg"].includes(req.file.mimetype)) {
+        return res.status(400).json({ error: "File is not a JPG image." });
+    }
     const existschef=await Chef.findOne({where:{email}});
     if(existschef){
         return res.status(400).json({message:'Email already exists'})
     }
+   
     password=await encryptpassword(password);
     const chef=await Chef.create({firstName,lastName,email,password,profilepic})
     const token=await generateToken(chef.id);
