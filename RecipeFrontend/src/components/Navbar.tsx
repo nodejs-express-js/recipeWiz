@@ -14,13 +14,17 @@ const Navbar = () => {
                 <div onClick={()=>{navigate("/login")}} className={Styles.login}>login</div>
             </div>
             : 
-            <div >
+            <div className={Styles.loggedinContainer}>
+                <img src={state.profilepic} alt="profile pic" className={Styles.profilePic}/>
+                <div>
                 <div onClick={()=>{navigate("/profile")}} className={Styles.profile}>
                     Welcome {state.email}
                 </div>
                 <div>
-                    <button onClick={()=>dispatch({type: 'LOGOUT',payload:{email:'',token:''}})}>Logout</button>
+                    <button onClick={()=>dispatch({type: 'LOGOUT',payload:{email:'',token:'',profilepic:''}})}>Logout</button>
                 </div>
+                </div>
+                
             </div>
         }
     </div>

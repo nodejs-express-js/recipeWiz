@@ -13,3 +13,12 @@ cursor: pointer;
 .login{
     cursor: pointer;
 }
+.loggedinContainer{
+    display: flex;
+}
+.profilePic{
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+}

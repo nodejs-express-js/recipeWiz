@@ -10,14 +10,15 @@ type creatContextType={
 }
 export type chefStateType={
     email:string,
-    token:string
+    token:string,
+    profilepic:string
 }
 type actionType={
     type: string,
     payload: chefStateType 
 }
 const chefState={
-    email: '',token: ''
+    email: '',token: '',profilepic:''
 }
 
 
@@ -30,8 +31,8 @@ const chefReducer=(state:chefStateType,action:actionType)=>{
             localStorage.setItem('chef', JSON.stringify(action.payload));
             return action.payload
         case 'LOGOUT':
-            localStorage.setItem('chef', JSON.stringify({ email: '', token: ''}));
-            return { email: '', token: ''}
+            localStorage.setItem('chef', JSON.stringify(chefState));
+            return chefState
         default:
             return state
     }
