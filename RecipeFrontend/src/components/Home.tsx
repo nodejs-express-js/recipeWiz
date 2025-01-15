@@ -42,7 +42,7 @@ const Home = () => {
             posts.map(post=>(
                 <div key={post.id} className={Styles.onePost}>
                     <div className={Styles.userInfo}>
-                    <img src={post.chef.profilepic} alt={`${post.chef.firstName} image`}/>
+                    <img src={post.chef.profilepic} alt={`${post.chef.firstName} image`} className={Styles.profilepic}/>
                         <span className={Styles.name}>
                             <div>{post.chef.firstName}</div>
                             <div>{post.chef.lastName}</div>

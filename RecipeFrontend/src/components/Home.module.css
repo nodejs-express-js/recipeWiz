@@ -9,9 +9,15 @@ margin: 1rem;
 }
 .userInfo{
     display: flex;
-    background-color: red;
     display: flex;
+    background-color: lightblue;
     padding: 1rem;    
+}
+.profilepic{
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    object-fit:cover;
 }
 .name{
     display: flex;
