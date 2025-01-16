@@ -38,7 +38,6 @@ const useSignUp = () => {
             setError("Something went wrong with server")
         }
         setIsLoading(false);
-
     }
     return {loading,error,sendSignUpInfoToServer}
 }

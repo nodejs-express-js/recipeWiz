@@ -14,10 +14,10 @@ const Navbar = () => {
                 <div onClick={()=>{navigate("/login")}} className={Styles.login}>login</div>
             </div>
             : 
-            <div className={Styles.loggedinContainer}>
-                <img src={state.profilepic} alt="profile pic" className={Styles.profilePic}/>
+            <div className={Styles.loggedinContainer}  >
+                <img src={state.profilepic} alt="profile pic" className={Styles.profilePic} onClick={()=>{navigate("/profile")}}/>
                 <div>
-                <div onClick={()=>{navigate("/profile")}} className={Styles.profile}>
+                <div className={Styles.profile}>
                     Welcome {state.email}
                 </div>
                 <div>
