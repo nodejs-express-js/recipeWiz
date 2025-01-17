@@ -25,34 +25,35 @@ const Home = () => {
     const [posts,setPosts]=useState<Recipe[]>([]);
     const [curr,setCurr]=useState(2)
 
-    const handlescroll=async()=>{
+    const handlescroll=async(e)=>{
+        console.log(e)
         const scrollTop = window.scrollY; 
         const windowHeight = window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight;
-        console.log(scrollTop,windowHeight,documentHeight)
         if (scrollTop + windowHeight >= documentHeight) {
             const latestposts=await getFewPosts(curr,curr+1)
-            console.log(curr)
+
             setCurr((curr)=>{
-                return curr+2});
+                console.log(2,curr)
+
+                return curr+2
+            });
             setPosts((posts)=>{
                 console.log(posts)
              return   [...posts,...latestposts]
             });    
-                
         }
     }
     useEffect(()=>{ 
         const temp=async()=>{
             const firstfewposts=await getFewPosts(0,1)
             setPosts(firstfewposts);
-            
         }
         temp()
-        window.addEventListener("scrollend",handlescroll)
-        return ()=>{
-            window.removeEventListener("scrollend",()=>{})
-        }
+        // window.addEventListener("scrollend",handlescroll)
+        // return ()=>{
+        //     window.removeEventListener("scrollend",()=>{})
+        // }
     },[])
 
   return (
@@ -62,7 +63,7 @@ const Home = () => {
         loading ? 
         <div>Loading...</div>
         :
-        <div >
+        <div onScroll={(e)=>{handlescroll(e)}}>
             {error? <div>Error: {error}</div>:
             posts.map(post=>(
                 <div key={post.id} className={Styles.onePost}  >

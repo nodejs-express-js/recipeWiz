@@ -1,19 +1,24 @@
 const express = require('express');
 const app=express();
-const chefRouter=require("./Routers/chefRouter")
-const chefProtectorMiddleware=require("./MiddleWare/chefProtectorMiddleware")
 require('dotenv').config()
-const {sequelize}=require("./models");
-const recipeRouter=require("./Routers/recipeRouter")
-const chefPublicInfoRouter=require("./Routers/chefPublicInfoController") 
 const cors=require("cors")
+
+
+const chefRouter=require("./Routers/chefRouter")
+const recipeRouter=require("./Routers/recipeRouter")
+const chefProfileRouter=require("./Routers/chefProfileRouter")
+
+const chefProtectorMiddleware=require("./MiddleWare/chefProtectorMiddleware")
+const {sequelize}=require("./models");
+
 app.use(express.json());
 app.use(cors())
-app.use(process.env.PREFIX+"/",chefRouter)
 
-app.use(process.env.PREFIX,chefPublicInfoRouter)
+
+app.use(process.env.PREFIX+"/",chefRouter)
 app.use(process.env.PREFIX+"/protected",chefProtectorMiddleware)
 app.use(process.env.PREFIX+"/protected",recipeRouter)
+app.use(process.env.PREFIX+"/protected",chefProfileRouter)
 
 
 
