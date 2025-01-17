@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useGetRecipe from '../hooks/useGetRecipe';
 import Navbar from './Navbar'
 import Styles from './Home.module.css'
@@ -23,13 +23,38 @@ type Recipe = {
 const Home = () => {
     const  {error,loading,getFewPosts}=useGetRecipe();
     const [posts,setPosts]=useState<Recipe[]>([]);
-    useEffect(()=>{
+    const [curr,setCurr]=useState(2)
+
+    const handlescroll=async()=>{
+        const scrollTop = window.scrollY; 
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        console.log(scrollTop,windowHeight,documentHeight)
+        if (scrollTop + windowHeight >= documentHeight) {
+            const latestposts=await getFewPosts(curr,curr+1)
+            console.log(curr)
+            setCurr((curr)=>{
+                return curr+2});
+            setPosts((posts)=>{
+                console.log(posts)
+             return   [...posts,...latestposts]
+            });    
+                
+        }
+    }
+    useEffect(()=>{ 
         const temp=async()=>{
-            const posts=await getFewPosts(1,10)
-            setPosts(posts);
+            const firstfewposts=await getFewPosts(0,1)
+            setPosts(firstfewposts);
+            
         }
         temp()
+        window.addEventListener("scrollend",handlescroll)
+        return ()=>{
+            window.removeEventListener("scrollend",()=>{})
+        }
     },[])
+
   return (
     <div>
         <Navbar></Navbar>
@@ -37,10 +62,10 @@ const Home = () => {
         loading ? 
         <div>Loading...</div>
         :
-        <div>
+        <div >
             {error? <div>Error: {error}</div>:
             posts.map(post=>(
-                <div key={post.id} className={Styles.onePost}>
+                <div key={post.id} className={Styles.onePost}  >
                     <div className={Styles.userInfo}>
                     <img src={post.chef.profilepic} alt={`${post.chef.firstName} image`} className={Styles.profilepic}/>
                         <span className={Styles.name}>
