@@ -69,35 +69,6 @@ const getRecipes = async (req, res) => {
 
 
 
-const postRecipes=async(req,res)=>{
-    try{
-        const {title ,description,ingredients,instructions}=req.body;
-        if(!title ||!description ||!ingredients ||!instructions){
-            return res.status(400).json({message:'Please provide all the required fields'})
-        }
-        console.log(title ,description,ingredients,instructions)
-        console.log(req.file)
-        if (req.file.size > 3 * 1024 * 1024) {
-          return res.status(400).json({ error: "File size exceeds 3MB limit." });
-        }
-        if (!["image/jpeg"].includes(req.file.mimetype)) {
-          return res.status(400).json({ error: "File is not a JPG image." });
-        }
-        const uuid=uuidv4();
-        const key = `${uuid}.jpg`;
-        const command = new PutObjectCommand({
-            Bucket: process.env.POST_BUCKET_NAME,
-            Key: key,
-            Body: req.file.buffer,
-        });
-        const resonse=await s3.send(command);
-        const recipe=await Recipe.create({title,description,ingredients,instructions,chefId:req.chefId,image:key})
-        res.status(200).json(recipe)
-    }
-    catch(error){
-      console.log(error)
-        res.status(500).json({message:"Server Error"})
-    }
-}
 
-module.exports ={getRecipes,postRecipes}
+
+module.exports ={getRecipes}
