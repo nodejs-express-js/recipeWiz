@@ -25,13 +25,13 @@ const Home = () => {
     const  {error,loading,getFewPosts}=useGetRecipe();
     const [hasmore,setHasMore]=useState(true);
     const [posts,setPosts]=useState<Recipe[]>([]);
-    const [curr,setCurr]=useState(2)
+    const [curr,setCurr]=useState(5)
     const targetRef=useRef<HTMLDivElement>(null);
 
   
     useEffect(()=>{
         const setInitialPosts=async()=>{
-            const firstfewposts=await getFewPosts(0,1)
+            const firstfewposts=await getFewPosts(0,4)
             setPosts(firstfewposts);
         }
         setInitialPosts();  
@@ -40,15 +40,13 @@ const Home = () => {
     useEffect(()=>{
         const initalObserver=new IntersectionObserver(async([entries])=>{
             if (entries.isIntersecting ) {
-                console.log(entries)
-                console.log(1,window.scrollY)
                 currscroll.current=window.scrollY
-                const nextposts=await getFewPosts(curr,curr+1);
+                const nextposts=await getFewPosts(curr,curr+4);
                 if(nextposts.length===0){
                     setHasMore(false)
                     return;
                 }
-                setCurr(curr=>curr+2);
+                setCurr(curr=>curr+5);
                 setPosts(prevPosts=>{
                   return  [...prevPosts,...nextposts]
                 })
