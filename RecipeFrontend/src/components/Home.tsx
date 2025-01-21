@@ -1,8 +1,8 @@
-import {  useCallback, useEffect, useRef, useState } from 'react';
+import {   useEffect, useRef, useState } from 'react';
 import useGetRecipe from '../hooks/useGetRecipe';
 import Navbar from './Navbar'
 import Styles from './Home.module.css'
-type Recipe = {
+export type Recipe = {
     id: number;
     title: string;
     description: string;
@@ -46,22 +46,16 @@ const Home = () => {
                     setHasMore(false)
                     return;
                 }
-                setCurr(curr=>curr+5);
-                setPosts(prevPosts=>{
-                  return  [...prevPosts,...nextposts]
-                })
-                
+                setCurr(curr=>curr+5);                                   
+                setPosts(prevPosts=>prevPosts.concat(nextposts))
             }
         },{
             rootMargin: "0px 0px 200px 0px"
         })
         window.scrollTo(0,currscroll.current)
-
         if(targetRef.current && hasmore){
-
             initalObserver.observe(targetRef.current)
         }
-
         return () => {
             if (targetRef.current) {
                 initalObserver.unobserve(targetRef.current);

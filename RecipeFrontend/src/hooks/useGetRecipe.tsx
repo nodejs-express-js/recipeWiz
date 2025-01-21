@@ -44,18 +44,21 @@ const useGetRecipe = () => {
             }
             else{
                 setError(posts.message)
+                return [];
             }
         }
         else{
             setError("please login")
+            return [];
         }
     }
-    catch(err){
-        console.log(err)
+    catch{
+        setIsLoading(false)
+
         setError("Failed to fetch data")
+        return [];
     }
-    setIsLoading(false)
-    return [];
+ 
   }
   return {error,loading,getFewPosts}
 }
