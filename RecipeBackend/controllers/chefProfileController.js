@@ -64,6 +64,7 @@ const getAllPosts=async(req,res)=>{
 const postRecipes=async(req,res)=>{
     try{
         const {title ,description,ingredients,instructions}=req.body;
+        console.log(title ,description,ingredients,instructions)
         if(!title ||!description ||!ingredients ||!instructions){
             return res.status(400).json({message:'Please provide all the required fields'})
         }

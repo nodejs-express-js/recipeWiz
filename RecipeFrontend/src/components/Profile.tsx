@@ -3,6 +3,7 @@ import useGetProfileUserRecipes from "../hooks/useGetProfileUserRecipes";
 import Navbar from "./Navbar"
 import Styles from './Profile.module.css'
 import { Recipe } from "./Home";
+import ProfileCreatAPost from "./ProfileCreatAPost";
 const Profile = () => {
     const {error,loading,fetchProfileUserRecipes}=useGetProfileUserRecipes()
     const [posts,setPosts]=useState<Recipe[]>([]);
@@ -83,7 +84,7 @@ const Profile = () => {
             <h1>Profile</h1>
             <p>Welcome to your Edit profile</p>
             <div className={Styles.Top}>
-
+                    <ProfileCreatAPost></ProfileCreatAPost>
             </div>
             <div className={Styles.bottom}>
                 <div>{showPosts()}</div>

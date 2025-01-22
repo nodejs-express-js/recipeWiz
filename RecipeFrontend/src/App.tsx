@@ -11,10 +11,12 @@ function App() {
   return (
     <div>
       <Routes> 
+      <Route path="/" element={state.token==='' ? <Navigate to="/login"></Navigate> : <Home></Home>}></Route>
+      <Route path="/profile" element={state.token==='' ?  <Navigate to="/login"></Navigate> : <Profile></Profile> }></Route>
+
         <Route path="/login" element={state.token==='' ? <Login></Login> : <Navigate to="/"></Navigate> }></Route>
         <Route path="/signup" element={state.token==='' ? <Signup></Signup> : <Navigate to="/"></Navigate> }></Route>
-        <Route path="/profile" element={state.token==='' ?  <Navigate to="/login"></Navigate> : <Profile></Profile> }></Route>
-        <Route path="/" element={state.token==='' ? <Navigate to="/login"></Navigate> : <Home></Home>}></Route>
+        <Route path="*" element={<Navigate to="/" />} />
 
       </Routes>
     </div>
