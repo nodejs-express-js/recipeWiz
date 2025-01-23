@@ -17,27 +17,33 @@ const useCreateARecipe = () => {
       if(recipe.image){
         multipartFormData.append('postimage', recipe.image);
       }
-    
+      
+
       const response=await fetch(import.meta.env.VITE_URL+"protected/createpost",{
         method:"POST",
         headers:{
             authorization: `Bearer ${state.token}`,
         },        
-        body:multipartFormData
+        body:multipartFormData,
       })
+
       const postcreation=await response.json();
+
       setIsLoading(false)
       if(postcreation.message){
         setError(postcreation.message)
+        return null;
       }
       else{
         return postcreation;
       }
       }
       catch{
-        setError("An error occurred while creating the recipe")
         setIsLoading(false)
+        setError("An error occurred while creating the recipe")
+        return null;
       }
+      
     }
   return {error,loading,createARecipe}
 }

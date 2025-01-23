@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Styles from './ProfileCreatePost.module.css'
 import useCreateARecipe from "../hooks/useCreateARecipe";
-import image from '../../public/fake-recipe.jpg'
+import image from '../fake-recipe.jpg'
 export type Recipe = {
 title: string;
 description: string;
@@ -10,8 +10,11 @@ instructions: string;
 image: File|null|string;
 };
 
+import { Recipe  as RecipeMain } from "./Home";
 
-const ProfileCreatAPost = () => {
+type propType={addAPost:(post: RecipeMain) => void}
+
+const ProfileCreatAPost = ({addAPost}:propType) => {
     const {error,loading,createARecipe}=useCreateARecipe();
     const [post,setPostInfo]=useState<Recipe>(
         {
@@ -34,10 +37,13 @@ const ProfileCreatAPost = () => {
     }
     const createAPost=async(e:React.FormEvent<HTMLFormElement> )=>{
         e.preventDefault();
-        console.log(post)
-        if(post.title && post.description && post.ingredients && post.instructions){
+        if(post.title && post.description && post.ingredients && post.instructions && post.image instanceof File){
           
-            await createARecipe(post)
+            const newpost=await createARecipe(post)
+            console.log(2,newpost)
+            if(newpost){
+                addAPost(newpost)
+            }
             if(error===""){
              setPostInfo( {
                 title: 'cookie',

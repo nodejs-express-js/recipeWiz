@@ -36,6 +36,9 @@ const Profile = () => {
             observer.disconnect()
         } 
     },[posts])
+     const addAPost=(post:Recipe)=>{
+        setPosts(prevPosts=>prevPosts.concat(post))
+     }
     const showPosts=()=>{
         return(<div>
             {posts.map((post,i)=>{  
@@ -84,7 +87,7 @@ const Profile = () => {
             <h1>Profile</h1>
             <p>Welcome to your Edit profile</p>
             <div className={Styles.Top}>
-                    <ProfileCreatAPost></ProfileCreatAPost>
+                    <ProfileCreatAPost addAPost={addAPost}></ProfileCreatAPost>
             </div>
             <div className={Styles.bottom}>
                 <div>{showPosts()}</div>

@@ -68,7 +68,9 @@ const postRecipes=async(req,res)=>{
         if(!title ||!description ||!ingredients ||!instructions){
             return res.status(400).json({message:'Please provide all the required fields'})
         }
-        
+        if (!req.file) {
+          return res.status(400).json({ message: 'File is missing in the multipart form.' });
+        }
         if (req.file.size > 3 * 1024 * 1024) {
           return res.status(400).json({ error: "File size exceeds 3MB limit." });
         }
@@ -84,7 +86,35 @@ const postRecipes=async(req,res)=>{
         });
         const resonse=await s3.send(command);
         const recipe=await Recipe.create({title,description,ingredients,instructions,chefId:req.chefId,image:key})
-        res.status(200).json(recipe)
+
+        
+        const lastRecipe = await Recipe.findOne({
+          where: { chefId: req.chefId }, // Optional, filter by the current chef if needed
+          include: [
+            {
+              model: Chef,
+              as: "chef",
+              attributes: ["id", "firstName", "lastName", "profilepic"], // Specify the fields you want
+            },
+          ],
+          order: [["createdAt", "DESC"]], // Sort by createdAt in descending order to get the latest
+        });
+        const getcommand1 = new GetObjectCommand({
+          Bucket: process.env.POST_BUCKET_NAME, 
+          Key: key,
+        });
+        const getcommand2 = new GetObjectCommand({
+          Bucket: process.env.BUCKET_NAME, 
+          Key:lastRecipe.chef.profilepic ,
+        })
+        const signedUrl1=await getSignedUrl(s3,getcommand1,{expiresIn:expirationTime})
+        console.log(signedUrl1)
+
+        const signedUrl2=await getSignedUrl(s3,getcommand2,{expiresIn:expirationTime})
+        console.log(signedUrl2)
+        lastRecipe.image=signedUrl1;
+        lastRecipe.chef.profilepic=signedUrl2;
+        res.status(200).json(lastRecipe)
     }
     catch(error){
         res.status(500).json({message:"Server Error"})
