@@ -40,11 +40,10 @@ const ProfileCreatAPost = ({addAPost}:propType) => {
         if(post.title && post.description && post.ingredients && post.instructions && post.image instanceof File){
           
             const newpost=await createARecipe(post)
-            console.log(2,newpost)
             if(newpost){
                 addAPost(newpost)
             }
-            if(error===""){
+            
              setPostInfo( {
                 title: 'cookie',
                 description: 'what kind of cookie',
@@ -53,7 +52,7 @@ const ProfileCreatAPost = ({addAPost}:propType) => {
                 image: image,
             })
             setPreviewImage(image)
-            }
+            
         }
         else{
             alert("Please fill all the fields")

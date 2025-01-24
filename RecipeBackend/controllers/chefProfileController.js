@@ -108,10 +108,8 @@ const postRecipes=async(req,res)=>{
           Key:lastRecipe.chef.profilepic ,
         })
         const signedUrl1=await getSignedUrl(s3,getcommand1,{expiresIn:expirationTime})
-        console.log(signedUrl1)
 
         const signedUrl2=await getSignedUrl(s3,getcommand2,{expiresIn:expirationTime})
-        console.log(signedUrl2)
         lastRecipe.image=signedUrl1;
         lastRecipe.chef.profilepic=signedUrl2;
         res.status(200).json(lastRecipe)
