@@ -4,8 +4,10 @@ import Navbar from "./Navbar"
 import Styles from './Profile.module.css'
 import { Recipe } from "./Home";
 import ProfileCreatAPost from "./ProfileCreatAPost";
+import useDeleteProfileUserRecipe from "../hooks/useDeleteProfileUserRecipe";
 const Profile = () => {
     const {error,loading,fetchProfileUserRecipes}=useGetProfileUserRecipes()
+    const {error:deleteError,loading:deleteLoading,deleteProfileUserRecipe}=useDeleteProfileUserRecipe();
     const [posts,setPosts]=useState<Recipe[]>([]);
     const [curr,setCurr]=useState(2);
     const targetRef=useRef<HTMLDivElement>(null);
@@ -39,6 +41,11 @@ const Profile = () => {
      const addAPost=(post:Recipe)=>{
         setPosts(prevPosts=>prevPosts.concat(post))
      }
+     const deleteThisPost=(post:Recipe)=>{
+        deleteProfileUserRecipe(post.id)
+        const updatedPosts=posts.filter(p=>p.id!==post.id)
+        setPosts(updatedPosts)
+     }
     const showPosts=()=>{
         return(<div>
             {posts.map((post,i)=>{  
@@ -57,6 +64,9 @@ const Profile = () => {
                                 <p>{post.description}</p>
                                 <p>{post.ingredients}</p>
                                 <p>{post.instructions}</p>
+                                <div>{deleteError}</div>
+                                <button onClick={()=>deleteThisPost(post)} disabled={deleteLoading}>delete  recipe</button>
+
                     </div>)
                 }
                 else{
@@ -74,6 +84,9 @@ const Profile = () => {
                                 <p>{post.description}</p>
                                 <p>{post.ingredients}</p>
                                 <p>{post.instructions}</p>
+                                <div>{deleteError}</div>
+
+                                <button onClick={()=>deleteThisPost(post)} disabled={deleteLoading}>delete  recipe</button>
                     </div>)
                 }     
         })}

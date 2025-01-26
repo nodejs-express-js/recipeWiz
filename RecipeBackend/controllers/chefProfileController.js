@@ -63,13 +63,18 @@ const getAllPosts=async(req,res)=>{
 
 const postRecipes=async(req,res)=>{
     try{
+      if(req.error){
+        return res.status(400).json({message:req.error})
+      }
         const {title ,description,ingredients,instructions}=req.body;
-        console.log(title ,description,ingredients,instructions)
         if(!title ||!description ||!ingredients ||!instructions){
             return res.status(400).json({message:'Please provide all the required fields'})
         }
         if (!req.file) {
           return res.status(400).json({ message: 'File is missing in the multipart form.' });
+        }
+        if(req.file.mimetype!=="image/jpeg"){
+          return res.status(400).json({ message: 'Invalid file type. Only JPG is allowed.' });
         }
         if (req.file.size > 3 * 1024 * 1024) {
           return res.status(400).json({ error: "File size exceeds 3MB limit." });
