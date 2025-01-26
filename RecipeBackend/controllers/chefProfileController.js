@@ -128,9 +128,10 @@ const postRecipes=async(req,res)=>{
 
 const deleteAPost = async(req,res)=>{
     try{
-      console.log(req.params.id)
       let delpost=parseInt(req.params.id)
-      const recipe=await Recipe.findByPk(delpost)
+      const recipe=await Recipe.findOne({
+        where: { chefId: req.chefId , id: delpost}})
+
       if(!recipe){
         return res.status(404).json({message:"No recipe found"})
       }
