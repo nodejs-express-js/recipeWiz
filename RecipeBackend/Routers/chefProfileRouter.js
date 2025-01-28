@@ -9,6 +9,6 @@ const upload = multer({ storage: storage,
 chefProfileRouter.post("/getpostinfo",chefProfileController.getAllPosts)
 chefProfileRouter.post("/createpost",upload.single('postimage'),chefProfileController.postRecipes)
 chefProfileRouter.delete("/deletepost/:id",chefProfileController.deleteAPost)
-
-
+chefProfileRouter.post("/likepost",chefProfileController.LikeAPost)
+chefProfileRouter.post("/unlikepost",chefProfileController.UnlikeAPost)
 module.exports=chefProfileRouter

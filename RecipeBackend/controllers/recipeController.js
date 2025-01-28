@@ -1,4 +1,4 @@
-const {Chef,Recipe}=require("../models/")
+const {Chef,Recipe,Like}=require("../models/")
 const {GetObjectCommand,S3Client,PutObjectCommand}=require("@aws-sdk/client-s3")
 const {getSignedUrl}=require("@aws-sdk/s3-request-presigner")
 const { v4: uuidv4 } = require('uuid');
@@ -40,6 +40,9 @@ const getRecipes = async (req, res) => {
       var chefprofilepics = new Map();
 
       for(let i=0;i<recipes.length;i++){
+        const likes=await Like.count({
+          where:{recipeId:recipes[i].id}
+        })
         if(chefprofilepics.has(recipes[i].dataValues.chef.dataValues.profilepic)){
           recipes[i].dataValues.chef.dataValues.profilepic=chefprofilepics.get(recipes[i].dataValues.chef.dataValues.profilepic)
 
@@ -59,6 +62,7 @@ const getRecipes = async (req, res) => {
         });
         const posturl = await getSignedUrl(s3, getPostImageCommand, { expiresIn: expirationTime });
         recipes[i].dataValues.image=posturl;
+        recipes[i].dataValues.likes=likes;
       }
 
       res.status(200).json(recipes);

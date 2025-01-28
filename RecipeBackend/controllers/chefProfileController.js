@@ -1,4 +1,5 @@
-const {Chef,Recipe}=require("../models/index")
+const {Chef,Recipe,Like}=require("../models/index")
+const Sequelize=require("sequelize")
 const {GetObjectCommand,S3Client,PutObjectCommand}=require("@aws-sdk/client-s3")
 const {getSignedUrl}=require("@aws-sdk/s3-request-presigner")
 const { v4: uuidv4 } = require('uuid');
@@ -30,12 +31,14 @@ const getAllPosts=async(req,res)=>{
           limit,
           include: [
             {
-              model: Chef, // Assumes there's a relation between Recipe and Chef
+              model: Chef,
               as: "chef",
-              attributes: ["id", "firstName", "lastName", "profilepic"], // Adjust fields to include only the ones you need
+              attributes: ["id", "firstName", "lastName", "profilepic"],
             },
-          ],
+          ],    
         });
+        
+
         if(recipes.length===0){
             return res.status(404).json({message:"No recipes found"})
         }
@@ -46,6 +49,11 @@ const getAllPosts=async(req,res)=>{
         const signedUrlforPic=await getSignedUrl(s3,commandforPic,{expiresIn:expirationTime})
 
           for(let i=0;i<recipes.length;i++) {
+            const likes=await Like.count({
+              where:{
+                recipeId:recipes[i].id
+              }
+            })
             const command = new GetObjectCommand({
               Bucket: process.env.POST_BUCKET_NAME, 
               Key: recipes[i].dataValues.image,
@@ -53,10 +61,12 @@ const getAllPosts=async(req,res)=>{
             const signedUrl=await getSignedUrl(s3,command,{expiresIn:expirationTime})
             recipes[i].dataValues.image=signedUrl;
             recipes[i].dataValues.chef.profilepic=signedUrlforPic;
+            recipes[i].dataValues.likes=likes;
           }
         res.status(200).json(recipes)
     }
     catch(err){
+      console.log(err);
         res.status(500).json({message:"something went wrong with server"})
     }
 }
@@ -142,4 +152,50 @@ const deleteAPost = async(req,res)=>{
         res.status(500).json({message:"something went wrong with server"})
     }
 }
-module.exports={getAllPosts,postRecipes,deleteAPost}
+
+
+const LikeAPost = async(req,res)=>{
+try{
+  const {id}=req.body;
+  const recipe=await Recipe.findOne({
+    where: {  id}})
+    if(!recipe){
+      return res.status(404).json({message:"No recipe found"})
+    }
+    let like=await Like.create({
+      recipeId:id,
+      chefId:req.chefId
+    })
+    res.status(200).json({message:"Recipe liked successfully"})
+}
+catch(err){
+  res.status(500).json({message:"something went wrong with server"})
+
+}
+}
+
+const UnlikeAPost = async(req,res)=>{
+  try{
+    const {id}=req.body;
+    const recipe=await Recipe.findOne({
+      where: {  id}})
+      if(!recipe){
+        return res.status(404).json({message:"No recipe found"})
+      }
+    let like=await Like.findOne({
+      where: { recipeId:id, chefId:req.chefId}
+    })
+    if(!like){
+      return res.status(404).json({message:"No like found for this recipe"})
+    }
+    await like.destroy()
+    res.status(200).json({message:"Recipe unliked successfully"})
+  }
+  catch(err){
+    res.status(500).json({message:"something went wrong with server"})
+  
+  }
+}
+
+
+module.exports={getAllPosts,postRecipes,deleteAPost,LikeAPost,UnlikeAPost}
