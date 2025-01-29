@@ -101,8 +101,6 @@ const postRecipes=async(req,res)=>{
         });
         const resonse=await s3.send(command);
         const recipe=await Recipe.create({title,description,ingredients,instructions,chefId:req.chefId,image:key})
-
-        
         const lastRecipe = await Recipe.findOne({
           where: { chefId: req.chefId }, // Optional, filter by the current chef if needed
           include: [
@@ -123,7 +121,6 @@ const postRecipes=async(req,res)=>{
           Key:lastRecipe.chef.profilepic ,
         })
         const signedUrl1=await getSignedUrl(s3,getcommand1,{expiresIn:expirationTime})
-
         const signedUrl2=await getSignedUrl(s3,getcommand2,{expiresIn:expirationTime})
         lastRecipe.image=signedUrl1;
         lastRecipe.chef.profilepic=signedUrl2;

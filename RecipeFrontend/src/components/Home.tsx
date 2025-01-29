@@ -2,6 +2,7 @@ import {   useEffect, useRef, useState } from 'react';
 import useGetRecipe from '../hooks/useGetRecipe';
 import Navbar from './Navbar'
 import Styles from './Home.module.css'
+import useChefLike from '../hooks/useChefLike';
 export type Recipe = {
     id: number;
     title: string;
@@ -24,20 +25,20 @@ export type Recipe = {
 const Home = () => {
     const currscroll=useRef(0);
     const  {error,loading,getFewPosts}=useGetRecipe();
+    const {error:likeerror,loading:likeloading,likePost, unLikePost}=useChefLike();
     const [hasmore,setHasMore]=useState(true);
     const [posts,setPosts]=useState<Recipe[]>([]);
     const [curr,setCurr]=useState(5)
     const targetRef=useRef<HTMLDivElement>(null);
 
-  
     useEffect(()=>{
         const setInitialPosts=async()=>{
             const firstfewposts=await getFewPosts(0,4)
             setPosts(firstfewposts);
         }
         setInitialPosts();  
-        
     },[])
+
     useEffect(()=>{
         const initalObserver=new IntersectionObserver(async([entries])=>{
             if (entries.isIntersecting ) {
@@ -66,13 +67,13 @@ const Home = () => {
     useEffect(()=>{
         window.scrollTo(0,currscroll.current)
     },[hasmore])
-
+   
     const showPosts=()=>{
         return (
             posts.map((post,i)=>
                 {
                     if(i===posts.length-1){
-                        return (<div key={i} className={Styles.onePost}  ref={targetRef}>
+                        return (<div key={post.id} className={Styles.onePost}  ref={targetRef}>
                             <div className={Styles.userInfo}>
                                 <img src={post.chef.profilepic} alt={`${post.chef.firstName} image`} className={Styles.profilepic}/>
                                 <span className={Styles.name}>
@@ -85,25 +86,23 @@ const Home = () => {
                             <p>{post.description}</p>
                             <p>{post.ingredients}</p>
                             <p>{post.instructions}</p>
-                            <div><span>{post.likes}</span></div>
+                            <div onClick={()=>{likePost(post.id)}}><span>{post.likes}</span></div>
                             </div>)
                     }
-                    return (<div key={i} className={Styles.onePost}  >
+                    return (<div key={post.id} className={Styles.onePost}  >
                         <div className={Styles.userInfo}>
                         <img src={post.chef.profilepic} alt={`${post.chef.firstName} image`} className={Styles.profilepic}/>
                             <span className={Styles.name}>
                                 <div>{post.chef.firstName}</div>
                                 <div>{post.chef.lastName}</div>
                             </span>
-                           
-                            
                         </div>
                         <h2>{post.title}</h2>
                         <img src={post.image} alt={`${post.title} image`} className={Styles.postImage}/>
                         <p>{post.description}</p>
                         <p>{post.ingredients}</p>
                         <p>{post.instructions}</p>
-                        <div><span>{post.likes}</span></div>
+                        <div onClick={()=>{likePost(post.id)}}><span>{post.likes}</span></div>
                     </div>)
                 }
                 
@@ -127,9 +126,7 @@ const Home = () => {
                 <div>{hasmore ?  <></> : <div>No more posts to be found</div>}</div> 
                 </div>}
         </div>
-        
         }
-
     </div>
   )
 }

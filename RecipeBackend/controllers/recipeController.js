@@ -35,8 +35,6 @@ const getRecipes = async (req, res) => {
           },
         ],
       });
-
-     
       var chefprofilepics = new Map();
 
       for(let i=0;i<recipes.length;i++){
@@ -45,7 +43,6 @@ const getRecipes = async (req, res) => {
         })
         if(chefprofilepics.has(recipes[i].dataValues.chef.dataValues.profilepic)){
           recipes[i].dataValues.chef.dataValues.profilepic=chefprofilepics.get(recipes[i].dataValues.chef.dataValues.profilepic)
-
         }
         else{
           const getcommand = new GetObjectCommand({
