@@ -65,6 +65,7 @@ const Profile = () => {
                                 <p>{post.ingredients}</p>
                                 <p>{post.instructions}</p>
                                 <div>{deleteError}</div>
+                                <button><span>Like</span>{post.likes}</button>
                                 <button onClick={()=>deleteThisPost(post)} disabled={deleteLoading}>delete  recipe</button>
 
                     </div>)
@@ -85,7 +86,8 @@ const Profile = () => {
                                 <p>{post.ingredients}</p>
                                 <p>{post.instructions}</p>
                                 <div>{deleteError}</div>
-
+                                
+                                <button><span>Like</span>{post.likes}</button>
                                 <button onClick={()=>deleteThisPost(post)} disabled={deleteLoading}>delete  recipe</button>
                     </div>)
                 }     

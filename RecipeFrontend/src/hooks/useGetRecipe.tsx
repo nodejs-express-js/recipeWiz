@@ -16,6 +16,7 @@ type Recipe = {
       lastName: string;
       profilepic: string;
     };
+    likes: number
   };
   
 const useGetRecipe = () => {
@@ -33,8 +34,7 @@ const useGetRecipe = () => {
                 headers:{
                     Authorization: `Bearer ${state.token}`,
                     'Content-Type': 'application/json', // Specify JSON format
-                },  
-                
+                },       
                 body: JSON.stringify({num1,num2})
             })
             const posts=await response.json();

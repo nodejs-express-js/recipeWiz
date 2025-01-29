@@ -18,6 +18,7 @@ export type Recipe = {
       lastName: string;
       profilepic: string;
     };
+    likes: number
   };
   
 const Home = () => {
@@ -84,7 +85,8 @@ const Home = () => {
                             <p>{post.description}</p>
                             <p>{post.ingredients}</p>
                             <p>{post.instructions}</p>
-                        </div>)
+                            <div><span>{post.likes}</span></div>
+                            </div>)
                     }
                     return (<div key={i} className={Styles.onePost}  >
                         <div className={Styles.userInfo}>
@@ -101,6 +103,7 @@ const Home = () => {
                         <p>{post.description}</p>
                         <p>{post.ingredients}</p>
                         <p>{post.instructions}</p>
+                        <div><span>{post.likes}</span></div>
                     </div>)
                 }
                 

@@ -16,7 +16,6 @@ module.exports = {
           key: 'id'
         },
         onDelete: 'CASCADE',
-        unique: true, // Ensures the chefId is unique
       },
       recipeId: {
         type: Sequelize.INTEGER,
@@ -34,14 +33,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    },{
-      indexes: [
-          {
-              unique: true,
-              fields: ['chefId', 'recipeId'],
-          },
-      ],
-  });
+    });
+
+    await queryInterface.addConstraint('Likes', {
+      fields: ['chefId', 'recipeId'],
+      type: 'unique',
+      name: 'unique_likes_chef_recipe'
+    });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Likes');

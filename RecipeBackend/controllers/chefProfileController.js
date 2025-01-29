@@ -1,5 +1,5 @@
 const {Chef,Recipe,Like}=require("../models/index")
-const Sequelize=require("sequelize")
+const {UniqueConstraintError }=require("sequelize")
 const {GetObjectCommand,S3Client,PutObjectCommand}=require("@aws-sdk/client-s3")
 const {getSignedUrl}=require("@aws-sdk/s3-request-presigner")
 const { v4: uuidv4 } = require('uuid');
@@ -157,8 +157,7 @@ const deleteAPost = async(req,res)=>{
 const LikeAPost = async(req,res)=>{
 try{
   const {id}=req.body;
-  const recipe=await Recipe.findOne({
-    where: {  id}})
+  const recipe=await Recipe.findOne({where: {id}})
     if(!recipe){
       return res.status(404).json({message:"No recipe found"})
     }
@@ -168,9 +167,14 @@ try{
     })
     res.status(200).json({message:"Recipe liked successfully"})
 }
-catch(err){
+catch(error){
+  
+  if(error.message==="Validation error"){
+    return res.status(409).json({
+      message: ` like already exists on this recipe.`,
+    });
+  }
   res.status(500).json({message:"something went wrong with server"})
-
 }
 }
 
