@@ -41,6 +41,12 @@ const getRecipes = async (req, res) => {
         const likes=await Like.count({
           where:{recipeId:recipes[i].id}
         })
+        const liked = await Like.findOne({
+          where: {
+            recipeId: recipes[i].id,
+            chefId: req.chefId,
+          },
+        });
         if(chefprofilepics.has(recipes[i].dataValues.chef.dataValues.profilepic)){
           recipes[i].dataValues.chef.dataValues.profilepic=chefprofilepics.get(recipes[i].dataValues.chef.dataValues.profilepic)
         }
@@ -60,6 +66,7 @@ const getRecipes = async (req, res) => {
         const posturl = await getSignedUrl(s3, getPostImageCommand, { expiresIn: expirationTime });
         recipes[i].dataValues.image=posturl;
         recipes[i].dataValues.likes=likes;
+        recipes[i].dataValues.isLiked=!!liked;
       }
 
       res.status(200).json(recipes);

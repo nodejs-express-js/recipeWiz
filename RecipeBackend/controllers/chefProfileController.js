@@ -16,7 +16,6 @@ const expirationTime = 60*60*24*process.env.EXPIRY_TIME;
 const getAllPosts=async(req,res)=>{
     try{
         const {num1,num2}=req.body;
-       
         const offset = parseInt(num1, 10); // Starting index for the range
         const limit = parseInt(num2, 10) - parseInt(num1, 10) + 1; // Calculate the number of recipes to fetch
         if (isNaN(offset) || isNaN(limit) || offset < 0 || limit <= 0) {
@@ -35,6 +34,7 @@ const getAllPosts=async(req,res)=>{
               as: "chef",
               attributes: ["id", "firstName", "lastName", "profilepic"],
             },
+          
           ],    
         });
         
@@ -54,6 +54,14 @@ const getAllPosts=async(req,res)=>{
                 recipeId:recipes[i].id
               }
             })
+            const liked = await Like.findOne({
+              where: {
+                recipeId: recipes[i].id,
+                chefId: req.chefId,
+              },
+            });
+            
+        
             const command = new GetObjectCommand({
               Bucket: process.env.POST_BUCKET_NAME, 
               Key: recipes[i].dataValues.image,
@@ -62,6 +70,8 @@ const getAllPosts=async(req,res)=>{
             recipes[i].dataValues.image=signedUrl;
             recipes[i].dataValues.chef.profilepic=signedUrlforPic;
             recipes[i].dataValues.likes=likes;
+            recipes[i].dataValues.isLiked=!!liked;
+
           }
         res.status(200).json(recipes)
     }
