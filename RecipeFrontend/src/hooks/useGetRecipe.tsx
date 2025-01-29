@@ -16,7 +16,8 @@ type Recipe = {
       lastName: string;
       profilepic: string;
     };
-    likes: number
+    likes: number,
+    isLiked:boolean
   };
   
 const useGetRecipe = () => {

@@ -19,7 +19,8 @@ export type Recipe = {
       lastName: string;
       profilepic: string;
     };
-    likes: number
+    likes: number,
+    isLiked:boolean
   };
   
 const Home = () => {
@@ -67,7 +68,20 @@ const Home = () => {
     useEffect(()=>{
         window.scrollTo(0,currscroll.current)
     },[hasmore])
-   
+   const likeOrUnLikePost=async(id:number,isLiked:boolean)=>{
+    if(isLiked){
+        const success=await unLikePost(id);
+        if(success){
+            setPosts(prevPosts=>prevPosts.map(post=>post.id===id?{...post,isLiked:false,likes:post.likes-1}:post))
+        }
+    }
+    else{
+        const success=await likePost(id);
+        if(success){
+            setPosts(prevPosts=>prevPosts.map(post=>post.id===id?{...post,isLiked:true,likes:post.likes+1}:post))
+        }
+    }
+   }
     const showPosts=()=>{
         return (
             posts.map((post,i)=>
@@ -86,7 +100,7 @@ const Home = () => {
                             <p>{post.description}</p>
                             <p>{post.ingredients}</p>
                             <p>{post.instructions}</p>
-                            <div onClick={()=>{likePost(post.id)}}><span>{post.likes}</span></div>
+                            <button onClick={()=>{likeOrUnLikePost(post.id,post.isLiked)}} disabled={likeloading}><span>{post.likes}</span></button>
                             </div>)
                     }
                     return (<div key={post.id} className={Styles.onePost}  >
@@ -102,8 +116,8 @@ const Home = () => {
                         <p>{post.description}</p>
                         <p>{post.ingredients}</p>
                         <p>{post.instructions}</p>
-                        <div onClick={()=>{likePost(post.id)}}><span>{post.likes}</span></div>
-                    </div>)
+                        <button onClick={()=>{likeOrUnLikePost(post.id,post.isLiked)}} disabled={likeloading}><span>{post.likes}</span></button>
+                        </div>)
                 }
                 
             )
