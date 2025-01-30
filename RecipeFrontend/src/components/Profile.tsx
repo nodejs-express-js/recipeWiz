@@ -5,9 +5,25 @@ import Styles from './Profile.module.css'
 import { Recipe } from "./Home";
 import ProfileCreatAPost from "./ProfileCreatAPost";
 import useDeleteProfileUserRecipe from "../hooks/useDeleteProfileUserRecipe";
+import useChefLike from "../hooks/useChefLike";
 const Profile = () => {
     const {error,loading,fetchProfileUserRecipes}=useGetProfileUserRecipes()
     const {error:deleteError,loading:deleteLoading,deleteProfileUserRecipe}=useDeleteProfileUserRecipe();
+    const {loading:likeloading,likePost, unLikePost}=useChefLike();
+    const likeOrUnLikePost=async(id:number,isLiked:boolean)=>{
+        if(isLiked){
+            const success=await unLikePost(id);
+            if(success){
+                setPosts(prevPosts=>prevPosts.map(post=>post.id===id?{...post,isLiked:false,likes:post.likes-1}:post))
+            }
+        }
+        else{
+            const success=await likePost(id);
+            if(success){
+                setPosts(prevPosts=>prevPosts.map(post=>post.id===id?{...post,isLiked:true,likes:post.likes+1}:post))
+            }
+        }
+       }
     const [posts,setPosts]=useState<Recipe[]>([]);
     const [curr,setCurr]=useState(2);
     const targetRef=useRef<HTMLDivElement>(null);
@@ -65,7 +81,7 @@ const Profile = () => {
                                 <p>{post.ingredients}</p>
                                 <p>{post.instructions}</p>
                                 <div>{deleteError}</div>
-                                <button><span>Like</span>{post.likes}</button>
+                                <button onClick={()=>{likeOrUnLikePost(post.id,post.isLiked)}} disabled={likeloading}><span>{post.likes}</span></button>
                                 <button onClick={()=>deleteThisPost(post)} disabled={deleteLoading}>delete  recipe</button>
 
                     </div>)
@@ -87,7 +103,7 @@ const Profile = () => {
                                 <p>{post.instructions}</p>
                                 <div>{deleteError}</div>
                                 
-                                <button><span>Like</span>{post.likes}</button>
+                                <button onClick={()=>{likeOrUnLikePost(post.id,post.isLiked)}} disabled={likeloading}><span>{post.likes}</span></button>
                                 <button onClick={()=>deleteThisPost(post)} disabled={deleteLoading}>delete  recipe</button>
                     </div>)
                 }     

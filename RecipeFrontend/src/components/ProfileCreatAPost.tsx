@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Styles from './ProfileCreatePost.module.css'
 import useCreateARecipe from "../hooks/useCreateARecipe";
 import image from '../fake-recipe.jpg'
@@ -16,13 +16,15 @@ type propType={addAPost:(post: RecipeMain) => void}
 
 const ProfileCreatAPost = ({addAPost}:propType) => {
     const {error,loading,createARecipe}=useCreateARecipe();
+    const ref = useRef<HTMLInputElement>();
+
     const [post,setPostInfo]=useState<Recipe>(
         {
             title: 'cookie',
             description: 'what kind of cookie',
             ingredients: 'ingredients of cookie',
             instructions: 'instructions of cookie',
-            image: image,
+            image: "",
         }
     );
     const [previewImage,setPreviewImage] = useState<string>(image)
@@ -49,8 +51,12 @@ const ProfileCreatAPost = ({addAPost}:propType) => {
                 description: 'what kind of cookie',
                 ingredients: 'ingredients of cookie',
                 instructions: 'instructions of cookie',
-                image: image,
+                image: "",
             })
+            if(ref.current ){
+                ref.current.value = "";
+            }
+
             setPreviewImage(image)
             
         }
@@ -80,7 +86,7 @@ const ProfileCreatAPost = ({addAPost}:propType) => {
 
             <div>
                 <label >Image</label>
-                <input type="file" name="image" accept="image/*" onChange={(e)=>{handleFileUpload(e)}}></input>
+                <input type="file" name="image" accept="image/*" ref={ref}  onChange={(e)=>{handleFileUpload(e)}}></input>
             </div>
             {error && <div>{error}</div>}
             <div>

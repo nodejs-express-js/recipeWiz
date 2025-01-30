@@ -39,8 +39,8 @@ const useGetRecipe = () => {
                 body: JSON.stringify({num1,num2})
             })
             const posts=await response.json();
+            setIsLoading(false)
             if(response.ok){
-                setIsLoading(false)
                 return posts;
             }
             else{
