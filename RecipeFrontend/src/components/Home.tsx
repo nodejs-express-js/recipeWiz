@@ -24,7 +24,6 @@ export type Recipe = {
   };
   
 const Home = () => {
-    // const currscroll=useRef(0);
     const  {error,loading,getFewPosts}=useGetRecipe();
     const {loading:likeloading,likePost, unLikePost}=useChefLike();
     const [hasmore,setHasMore]=useState(true);
@@ -43,19 +42,18 @@ const Home = () => {
     useEffect(()=>{
         const initalObserver=new IntersectionObserver(async([entries])=>{
             if (entries.isIntersecting ) {
-                // currscroll.current=window.scrollY
                 const nextposts=await getFewPosts(curr,curr+4);
                 if(nextposts.length===0){
                     setHasMore(false)
                     return;
                 }
-                setCurr(curr=>curr+5);                                   
+                setCurr(curr=>curr+5);
+                console.log(nextposts)                                   
                 setPosts(prevPosts=>prevPosts.concat(nextposts))
             }
         },{
-            rootMargin: "0px 0px 200px 0px"
+            threshold: 0.1
         })
-        // window.scrollTo(0,currscroll.current)
         if(targetRef.current && hasmore){
             initalObserver.observe(targetRef.current)
         }
@@ -65,9 +63,8 @@ const Home = () => {
             }
         }
     },[posts])
-    useEffect(()=>{
-        // window.scrollTo(0,currscroll.current)
-    },[hasmore])
+    
+    
    const likeOrUnLikePost=async(id:number,isLiked:boolean)=>{
     if(isLiked){
         const success=await unLikePost(id);
@@ -130,17 +127,15 @@ const Home = () => {
   return (
     <div>
         <Navbar></Navbar>
-        {
-        loading ? 
-        <div>Loading...</div>
-        :
+        
         <div >
             {error? <div>Error: {error}</div>: <div >
                 {showPosts()}
+                {loading ? <div>Loading...</div>:<></>}
                 <div>{hasmore ?  <></> : <div>No more posts to be found</div>}</div> 
                 </div>}
         </div>
-        }
+        
     </div>
   )
 }
