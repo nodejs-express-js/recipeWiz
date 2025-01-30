@@ -48,7 +48,6 @@ const Home = () => {
                     return;
                 }
                 setCurr(curr=>curr+5);
-                console.log(nextposts)                                   
                 setPosts(prevPosts=>prevPosts.concat(nextposts))
             }
         },{

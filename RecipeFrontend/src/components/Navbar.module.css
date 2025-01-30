@@ -1,24 +1,92 @@
-.container{
-display: flex;
-align-items: center;
-justify-content: space-between;
-}
-
-.home{
-    cursor: pointer;
-}
-.signup{
-cursor: pointer;
-}
-.login{
-    cursor: pointer;
-}
-.loggedinContainer{
+:root {
+    --primary-color: #ff6600;
+    --primary-hover: #e55a00;
+    --background-color: #fff5e1;
+    --text-color: #333;
+    --button-danger: #ed150e;
+    --button-danger-hover: #ff0800;
+    --border-color: #ff6600;
+  }
+  .container {
     display: flex;
-}
-.profilePic{
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--background-color);
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .home {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--primary-color);
+  }
+  
+  .homeImage {
+    width: 5rem;
+    height: 5rem;
+    margin-right: 10px;
+    border-radius: 50%;
+  }
+  
+  .authContainer {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .signup,
+  .login {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .signup:hover,
+  .login:hover {
+    background-color: var(--primary-hover);
+  }
+  
+  .loggedinContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profilePic {
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
-    object-fit: cover;
-}
+    cursor: pointer;
+    border: 2px solid var(--border-color);
+  }
+  
+  .profileDetails {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .profile {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text-color);
+  }
+  
+  .logoutButton {
+    margin-top: 5px;
+    padding: 6px 12px;
+    border: none;
+    background-color: var(--button-danger);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .logoutButton:hover {
+    background-color: var(--button-danger-hover);
+  }
+  
