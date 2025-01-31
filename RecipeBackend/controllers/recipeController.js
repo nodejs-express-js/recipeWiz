@@ -75,8 +75,24 @@ const getRecipes = async (req, res) => {
     }
 };
 
+const getChefInfo=async(req,res)=>{
+  try{
+    const chef=await Chef.findByPk(req.chefId,{
+      attributes: ["id", "firstName", "lastName","profilepic"],
+    });
+    const getcommand = new GetObjectCommand({
+      Bucket: process.env.BUCKET_NAME,
+      Key: chef.dataValues.profilepic
+    });
+    const url = await getSignedUrl(s3, getcommand, { expiresIn: expirationTime });
+    chef.dataValues.profilepic=url;
+    res.status(200).json(chef)
+  }
+  catch(error){
+    res.status(500).json({message:"Server Error"})
+  }
+}
 
 
 
-
-module.exports ={getRecipes}
+module.exports ={getRecipes,getChefInfo}

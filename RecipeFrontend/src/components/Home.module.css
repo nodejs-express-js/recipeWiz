@@ -1,31 +1,71 @@
-.onePost{
-background-color: wheat;
-width: 25rem;
+.mainContent{
 display: flex;
-flex-direction: column;
-align-items: center;
-margin: 1rem;
+   
+}
+.postsContainer{
+width: 30%;
+margin-left: 30%;
+}
+.onePost {
+    background-color: var(--background-color);
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
 }
 
-.userInfo{
+.userInfo {
     display: flex;
-    display: flex;
-    background-color: lightblue;
-    padding: 1rem;    
+    align-items: center;
+    margin-bottom: 10px;
 }
-.profilepic{
-    width: 3rem;
-    height: 3rem;
+
+.profilepic {
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    object-fit:cover;
-}
-.name{
-    display: flex;
-    margin-left: 1rem;
+    margin-right: 10px;
 }
 
-.postImage{
-    width:21.60rem;
-    height:27.0rem;
-    object-fit:cover;
+.name {
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+h2 {
+    color: var(--primary-color);
+}
+
+.postImage {
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+p {
+    color: var(--text-color);
+}
+
+button {
+    background-color: var(--button-bg);
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--button-hover-bg);
+}
+
+button:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+}
+
+button span {
+    margin-left: 5px;
+    color: var(--like-button-color);
 }

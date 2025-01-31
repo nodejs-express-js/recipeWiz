@@ -6,6 +6,7 @@ import { Recipe } from "./Home";
 import ProfileCreatAPost from "./ProfileCreatAPost";
 import useDeleteProfileUserRecipe from "../hooks/useDeleteProfileUserRecipe";
 import useChefLike from "../hooks/useChefLike";
+import ChefInfo from "./ChefInfo";
 const Profile = () => {
     const {error,loading,fetchProfileUserRecipes}=useGetProfileUserRecipes()
     const {error:deleteError,loading:deleteLoading,deleteProfileUserRecipe}=useDeleteProfileUserRecipe();
@@ -118,13 +119,14 @@ const Profile = () => {
             <h1>Profile</h1>
             <p>Welcome to your Edit profile</p>
             <div className={Styles.Top}>
+                    <ChefInfo></ChefInfo>
                     <ProfileCreatAPost addAPost={addAPost}></ProfileCreatAPost>
             </div>
             <div className={Styles.bottom}>
                 <div>{showPosts()}</div>
                 {loading && <div>Loading...</div>}
 
-                <div>{error}</div>
+                {error ? <div>{error}</div>:<></>}
             </div>
         </div>
     </div>
