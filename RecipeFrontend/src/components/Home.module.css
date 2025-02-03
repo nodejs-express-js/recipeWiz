@@ -1,23 +1,28 @@
 .mainContent{
 display: flex;
-   
+   background-color: var( --primary-color);
 }
 .postsContainer{
 width: 30%;
 margin-left: 30%;
 }
 .onePost {
-    background-color: var(--background-color);
+    background-color: var(--secondary-color);
+    color:var(--third-color);
     padding: 20px;
     margin: 10px 0;
     border-radius: 8px;
     border: 1px solid var(--border-color);
 }
-
+.onePost>div{
+    background-color: var(--secondary-color);
+    color:var(--third-color);
+}
 .userInfo {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+
 }
 
 .profilepic {
@@ -28,11 +33,15 @@ margin-left: 30%;
 }
 
 .name {
-    color: var(--secondary-color);
-    font-weight: bold;
+    color: var(--primary-color);   
+     font-weight: bold;
+     display:flex;
+}
+.name>div{
+    padding:0rem 0.2rem;
 }
 
-h2 {
+.postTitle {
     color: var(--primary-color);
 }
 
@@ -43,29 +52,37 @@ h2 {
     border-radius: 5px;
 }
 
-p {
-    color: var(--text-color);
-}
 
-button {
-    background-color: var(--button-bg);
-    color: white;
-    padding: 8px 16px;
+.likeButton {
+    padding: 0.5rem 1rem;
     border: none;
+    width: 100%;
     border-radius: 4px;
+    margin: 0.5rem 0;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--third-color);
+    color: var(--secondary-color);    
 }
 
-button:hover {
-    background-color: var(--button-hover-bg);
-}
+/* .likeButton:hover {
+    background-color: var(--hovered-color);
+    color:var(--hovered-text-color);
+} */
 
-button:disabled {
+.likeButton:disabled {
     background-color: var(--border-color);
     cursor: not-allowed;
 }
 
-button span {
+.likeButton span {
     margin-left: 5px;
     color: var(--like-button-color);
+}
+.likeicon{
+    width: 2rem;
+    height: 2rem;
+    margin:0 0.5rem;
 }

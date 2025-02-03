@@ -3,12 +3,13 @@
     padding: 0;
 }
 :root {
-    --primary-color: #ff6600;
-    --secondary-color: #333;
-    --background-color: #f4f4f4;
-    --text-color: #000;
-    --border-color: #ddd;
-    --button-bg: #007bff;
-    --button-hover-bg: #0056b3;
-    --like-button-color: #e74c3c;
+    /* --primary-color:   #B2456E;
+    --secondary-color: #FBEAE7;
+    --third-color:#552619; */
+    font-family:'Courier New', Courier, monospace;
+    --primary-color:   #F2EC9B;
+    --secondary-color: #1803A5;
+    --third-color:#96FFBD;
+    --hovered-color:black;
+    --hovered-text-color: white;
 }

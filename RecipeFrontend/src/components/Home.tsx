@@ -4,7 +4,8 @@ import Navbar from './Navbar';
 import Styles from './Home.module.css';
 import useChefLike from '../hooks/useChefLike';
 import ChefInfo from './ChefInfo';
-
+import like from '../icons/like.png'
+import unlike from '../icons/unlike.png'
 export type Recipe = {
     id: number;
     title: string;
@@ -96,11 +97,11 @@ const Home = () => {
                             </div>
                             <h2 className={Styles.postTitle}>{post.title}</h2>
                             <img src={post.image} alt={`${post.title} image`} className={Styles.postImage} />
-                            <p className={Styles.postDescription}>{post.description}</p>
-                            <p className={Styles.postIngredients}>{post.ingredients}</p>
-                            <p className={Styles.postInstructions}>{post.instructions}</p>
+                            <div className={Styles.postDescription}>description: {post.description}</div>
+                            <div className={Styles.postIngredients}>ingredients: {post.ingredients}</div>
+                            <div className={Styles.postInstructions}>instructions: {post.instructions}</div>
                             <button className={Styles.likeButton} onClick={() => { likeOrUnLikePost(post.id, post.isLiked) }} disabled={likeLoading}>
-                                <span>{post.likes}</span>
+                                <span>{post.likes}</span><span>likes</span>{post.isLiked ? <img src={like} alt='like' className={Styles.likeicon}></img> : <img src={unlike} alt='unlike' className={Styles.likeicon}></img>}
                             </button>
                         </div>
                     );
@@ -116,11 +117,11 @@ const Home = () => {
                         </div>
                         <h2 className={Styles.postTitle}>{post.title}</h2>
                         <img src={post.image} alt={`${post.title} image`} className={Styles.postImage} />
-                        <p className={Styles.postDescription}>{post.description}</p>
-                        <p className={Styles.postIngredients}>{post.ingredients}</p>
-                        <p className={Styles.postInstructions}>{post.instructions}</p>
+                        <div className={Styles.postDescription}>description: {post.description}</div>
+                        <div className={Styles.postIngredients}>ingredients: {post.ingredients}</div>
+                        <div className={Styles.postInstructions}>instructions: {post.instructions}</div>
                         <button className={Styles.likeButton} onClick={() => { likeOrUnLikePost(post.id, post.isLiked) }} disabled={likeLoading}>
-                            <span>{post.likes}</span>
+                        <span>{post.likes}</span><span>likes</span>{post.isLiked ? <img src={like} alt='like' className={Styles.likeicon}></img> : <img src={unlike} alt='unlike' className={Styles.likeicon}></img>}
                         </button>
                     </div>
                 );
