@@ -40,7 +40,7 @@ const getAllPosts=async(req,res)=>{
         
 
         if(recipes.length===0){
-            return res.status(404).json({message:"No recipes found"})
+            return res.status(404).json({message:"No more recipes found"})
         }
         const commandforPic = new GetObjectCommand({
           Bucket: process.env.BUCKET_NAME, 

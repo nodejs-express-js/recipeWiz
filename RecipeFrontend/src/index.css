@@ -7,9 +7,13 @@
     --secondary-color: #FBEAE7;
     --third-color:#552619; */
     font-family:'Courier New', Courier, monospace;
-    --primary-color:   #F2EC9B;
+    /* --primary-color:   #F2EC9B;
     --secondary-color: #1803A5;
     --third-color:#96FFBD;
-    --hovered-color:black;
+    --hovered-color:black; */
     --hovered-text-color: white;
+    --primary-color:  #201e1f;
+    --secondary-color: #CDBCA8;
+    --third-color:#6B7A89;
+    --hovered-color:black;
 }
