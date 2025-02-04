@@ -1,7 +1,7 @@
 import useSignUp from "../hooks/useSignUp";
 import Navbar from "./Navbar"
 import { ChangeEvent, useState } from "react";
-
+import Styles from './SignUp.module.css'
 type UserProfile = {
     firstName: string;
     lastName: string;
@@ -41,40 +41,94 @@ const Signup = () => {
     sendSignUpInfoToServer(userProfile.firstName,userProfile.lastName,userProfile.email,userProfile.password,userProfile.profilepic)
   }
   return (
-    <div>
-        <Navbar></Navbar>
-        <form>
-        <h1>Signup</h1>
-            <div>
-              <label>FirstName</label>
-              <input type="text" id="firstName" name="firstName" required value={userProfile.firstName} onChange={(e)=>{setUserProfile({...userProfile,firstName:e.target.value})}}/>
-            </div>
-            <div>
-              <label>lastName</label>
-              <input type="text" id="lastName" name="lastName" required value={userProfile.lastName} onChange={(e)=>{setUserProfile({...userProfile,lastName:e.target.value})}}/>
-            </div>
-            <div>
-              <label>Email</label>
-              <input type="email" id="email" name="email" required value={userProfile.email} onChange={(e)=>{setUserProfile({...userProfile,email:e.target.value})}}/>
-            </div>
-            <div>
-              <label>Password</label>
-              <input type="password" id="password" name="password" required value={userProfile.password} onChange={(e)=>{setUserProfile({...userProfile,password:e.target.value})}}/>
-            </div>
-            <div>
-              <label>Confirm Password</label>
-              <input type="password" id="confirmPassword" name="confirmPassword" required value={userProfile.confirmpassword} onChange={(e)=>{setUserProfile({...userProfile,confirmpassword:e.target.value})}}/>
-            </div>
-            <div>
-              <label>Profile Pic</label>
-              <input type="file" id="profilePic" name="profilePic" accept="image/*" required  onChange={handleFileChange}/>
-            </div>
-            <div>
-              <div>{error}</div>
-              <button type="submit" onClick={(e)=>signup(e)} disabled={loading}>Signup</button>
-            </div>
-        </form>
-    </div>
+    <div className={Styles.container}>
+    <Navbar></Navbar>
+    <form className={Styles.formContainer}>
+        <h1 className={Styles.signupTitle}>Signup</h1>
+        <div className={Styles.inputContainer}>
+            <label className={Styles.label}>FirstName</label>
+            <input 
+                type="text" 
+                id="firstName" 
+                name="firstName" 
+                required 
+                value={userProfile.firstName} 
+                onChange={(e) => { setUserProfile({ ...userProfile, firstName: e.target.value }) }} 
+                className={Styles.inputField}
+            />
+        </div>
+        <div className={Styles.inputContainer}>
+            <label className={Styles.label}>LastName</label>
+            <input 
+                type="text" 
+                id="lastName" 
+                name="lastName" 
+                required 
+                value={userProfile.lastName} 
+                onChange={(e) => { setUserProfile({ ...userProfile, lastName: e.target.value }) }} 
+                className={Styles.inputField}
+            />
+        </div>
+        <div className={Styles.inputContainer}>
+            <label className={Styles.label}>Email</label>
+            <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                required 
+                value={userProfile.email} 
+                onChange={(e) => { setUserProfile({ ...userProfile, email: e.target.value }) }} 
+                className={Styles.inputField}
+            />
+        </div>
+        <div className={Styles.inputContainer}>
+            <label className={Styles.label}>Password</label>
+            <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                required 
+                value={userProfile.password} 
+                onChange={(e) => { setUserProfile({ ...userProfile, password: e.target.value }) }} 
+                className={Styles.inputField}
+            />
+        </div>
+        <div className={Styles.inputContainer}>
+            <label className={Styles.label}>Confirm Password</label>
+            <input 
+                type="password" 
+                id="confirmPassword" 
+                name="confirmPassword" 
+                required 
+                value={userProfile.confirmpassword} 
+                onChange={(e) => { setUserProfile({ ...userProfile, confirmpassword: e.target.value }) }} 
+                className={Styles.inputField}
+            />
+        </div>
+        <div className={Styles.inputContainer}>
+            <label className={Styles.label}>Profile Pic</label>
+            <input 
+                type="file" 
+                id="profilePic" 
+                name="profilePic" 
+                accept="image/*" 
+                required 
+                onChange={handleFileChange} 
+                className={Styles.fileInput}
+            />
+        </div>
+        <div className={Styles.errorMessage}>{error}</div>
+        <button 
+            type="submit" 
+            onClick={(e) => signup(e)} 
+            disabled={loading} 
+            className={Styles.submitButton}
+        >
+            Signup
+        </button>
+    </form>
+</div>
+
   )
 }
 

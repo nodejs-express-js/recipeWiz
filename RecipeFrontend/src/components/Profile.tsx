@@ -7,6 +7,11 @@ import ProfileCreatAPost from "./ProfileCreatAPost";
 import useDeleteProfileUserRecipe from "../hooks/useDeleteProfileUserRecipe";
 import useChefLike from "../hooks/useChefLike";
 import ChefInfo from "./ChefInfo";
+import like from '../icons/like.png';
+import unlike from '../icons/unlike.png';
+import deleteicon from '../icons/delete.png';
+
+
 const Profile = () => {
     const {error,loading,fetchProfileUserRecipes}=useGetProfileUserRecipes()
     const {error:deleteError,loading:deleteLoading,deleteProfileUserRecipe}=useDeleteProfileUserRecipe();
@@ -78,12 +83,17 @@ const Profile = () => {
                         </div>
                         <h2>{post.title}</h2>
                                 <img src={post.image} alt={`${post.title} image`} className={Styles.postImage}/>
-                                <p>{post.description}</p>
-                                <p>{post.ingredients}</p>
-                                <p>{post.instructions}</p>
+                                <div className={Styles.postDescription}>description: {post.description}</div>
+                            <div className={Styles.postIngredients}>ingredients: {post.ingredients}</div>
+                            <div className={Styles.postInstructions}>instructions: {post.instructions}</div>
                                 <div>{deleteError}</div>
-                                <button onClick={()=>{likeOrUnLikePost(post.id,post.isLiked)}} disabled={likeloading}><span>{post.likes}</span></button>
-                                <button onClick={()=>deleteThisPost(post)} disabled={deleteLoading}>delete  recipe</button>
+                                <div className={Styles.buttonContainer}>
+
+                                <button onClick={()=>{likeOrUnLikePost(post.id,post.isLiked)}} disabled={likeloading} className={Styles.likeButton} >
+                                    <span>{post.likes}</span><span>likes</span>{post.isLiked ? <img src={like} alt='like' className={Styles.likeicon}></img> : <img src={unlike} alt='unlike' className={Styles.likeicon}></img>}
+                                </button>
+                                <button onClick={()=>deleteThisPost(post)} disabled={deleteLoading}> <img src={deleteicon} alt='delete' className={Styles.deleteicon}></img> <span>delete  recipe</span></button>
+                                </div>
 
                     </div>)
                 }
@@ -99,13 +109,17 @@ const Profile = () => {
                         </div>
                         <h2>{post.title}</h2>
                                 <img src={post.image} alt={`${post.title} image`} className={Styles.postImage}/>
-                                <p>{post.description}</p>
-                                <p>{post.ingredients}</p>
-                                <p>{post.instructions}</p>
+                                <div className={Styles.postDescription}>description: {post.description}</div>
+                                <div className={Styles.postIngredients}>ingredients: {post.ingredients}</div>
+                                <div className={Styles.postInstructions}>instructions: {post.instructions}</div>
                                 <div>{deleteError}</div>
-                                
-                                <button onClick={()=>{likeOrUnLikePost(post.id,post.isLiked)}} disabled={likeloading}><span>{post.likes}</span></button>
-                                <button onClick={()=>deleteThisPost(post)} disabled={deleteLoading}>delete  recipe</button>
+                                <div className={Styles.buttonContainer}>
+
+                                <button onClick={()=>{likeOrUnLikePost(post.id,post.isLiked)}} disabled={likeloading} className={Styles.likeButton} >
+                                    <span>{post.likes}</span><span>likes</span>{post.isLiked ? <img src={like} alt='like' className={Styles.likeicon}></img> : <img src={unlike} alt='unlike' className={Styles.likeicon}></img>}
+                                </button>
+                                <button onClick={()=>deleteThisPost(post)} disabled={deleteLoading}> <img src={deleteicon} alt='delete' className={Styles.deleteicon}></img> <span>delete  recipe</span></button>
+                                </div>
                     </div>)
                 }     
         })}
@@ -113,23 +127,23 @@ const Profile = () => {
         </div>)
     
     }
-    return ( <div>
-        <Navbar></Navbar>
-        <div>
-            <h1>Profile</h1>
-            <p>Welcome to your Edit profile</p>
-            <div className={Styles.Top}>
-                    <ChefInfo></ChefInfo>
-                    <ProfileCreatAPost addAPost={addAPost}></ProfileCreatAPost>
-            </div>
-            <div className={Styles.bottom}>
-                <div>{showPosts()}</div>
-                {loading && <div>Loading...</div>}
-
-                {error ? <div>{error}</div>:<></>}
-            </div>
+    return ( <div className={Styles.container}>
+        <Navbar  />
+        <div className={Styles.profileContainer}>
+          <h1 className={Styles.profileTitle}>Profile</h1>
+          <div className={Styles.profileDescription}>Welcome to your Edit profile</div>
+          <div className={Styles.Top}>
+            <ChefInfo />
+            <ProfileCreatAPost addAPost={addAPost}  />
+          </div>
+          <div className={Styles.bottom}>
+            <div className={Styles.postsContainer}>{showPosts()}</div>
+            {loading && <div className={Styles.loadingMessage}>Loading...</div>}
+            {error ? <div className={Styles.errorMessage}>{error}</div> : <></>}
+          </div>
         </div>
-    </div>
+      </div>
+      
     )
     
 }

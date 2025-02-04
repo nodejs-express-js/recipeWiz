@@ -58,6 +58,7 @@
     border-radius: 50%;
     cursor: pointer;
     border: 2px solid var(--border-color);
+    object-fit: cover;
   }
   
   .profileDetails {
@@ -81,8 +82,8 @@
     cursor: pointer;
   }
   
-  .logoutButton:hover {
-    background-color: var(--hovered-color);
-    color:var(--hovered-text-color);
-    }
+.logoutButton:hover {
+  background-color: var(--hovered-color);
+  color:var(--hovered-text-color);
+}
   
