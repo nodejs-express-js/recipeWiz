@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-recipe-app
+spec:
+  selector:
+    app: frontend-recipe-app  # This must match the labels in your Deployment
+  ports:
+    - protocol: TCP
+      port: 80       # Port exposed by the service
+      targetPort: 80 # Port on the container
+  type: LoadBalancer # Change to "NodePort" for local testing
