@@ -134,8 +134,8 @@ const postRecipes=async(req,res)=>{
         const signedUrl2=await getSignedUrl(s3,getcommand2,{expiresIn:expirationTime})
         lastRecipe.image=signedUrl1;
         lastRecipe.chef.profilepic=signedUrl2;
-        lastRecipe.likes=0;
-        lastRecipe.isLiked=false;
+        lastRecipe.dataValues.likes=0;
+        lastRecipe.dataValues.isLiked=false;
         res.status(200).json(lastRecipe)
     }
     catch(error){
