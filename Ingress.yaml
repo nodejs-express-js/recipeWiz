@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: recipe-app-ingress
+  annotations:
+    spec.ingressClassName: "gce" # Use GCP's default ingress controller
+spec:
+  rules:
+    - http:
+        paths:
+          # Route to frontend on the root path
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-recipe-app
+                port:
+                  number: 80
+          

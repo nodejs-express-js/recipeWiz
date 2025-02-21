@@ -7,12 +7,13 @@ gcloud auth login
 --------------------------------------------------------------------------------------------------------------------------------
 ################################set config##############################
 gcloud config set project stoked-depth-451301-f5
-
+###############################build the docker image##########################
+docker build -t recipe-app-frontend .
 ################################tag the docker image#################################
-docker tag recipe-app us-east1-docker.pkg.dev/stoked-depth-451301-f5/recipe-app/recipe-app
+docker tag recipe-app-frontend us-east1-docker.pkg.dev/stoked-depth-451301-f5/recipe-app/recipe-app-frontend
 
 ###############################push image to gcloud####################################
-docker push us-east1-docker.pkg.dev/stoked-depth-451301-f5/recipe-app/recipe-app
+docker push us-east1-docker.pkg.dev/stoked-depth-451301-f5/recipe-app/recipe-app-frontend
 
 ###############################list and check all the images################################
 gcloud artifacts docker images list us-east1-docker.pkg.dev/stoked-depth-451301-f5/recipe-app
@@ -22,7 +23,7 @@ gcloud artifacts docker images list us-east1-docker.pkg.dev/stoked-depth-451301-
 ---------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 ###################################set the default DNS kubectl to google cloud ####################################
-gcloud container clusters get-credentials recipe-app --region us-east1 --project stoked-depth-451301-f5
+gcloud container clusters get-credentials recipe-app-cluster --region us-east1 --project stoked-depth-451301-f5
 
 #############################################deploy the pods#############################################
 kubectl apply -f frontend_deployments.yaml
