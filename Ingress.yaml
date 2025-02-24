@@ -1,19 +1,20 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: recipe-app-ingress
+  name: frontend-recipe-app-ingress
   annotations:
-    spec.ingressClassName: "gce" # Use GCP's default ingress controller
+    kubernetes.io/spec.ingressClassName: "gce"  # Use "gce" for GKE Ingress
+    kubernetes.io/ingress.global-static-ip-name: "recipe-app"
+    networking.gke.io/managed-certificates: "frontend-recipe-app-cert"  # Link Managed Certificate
 spec:
   rules:
-    - http:
+    - host: diningservices.vishalgandla.online  # Your domain
+      http:
         paths:
-          # Route to frontend on the root path
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: frontend-recipe-app
+                name: frontend-recipe-app  # Your service name
                 port:
-                  number: 80
-          
+                  number: 80  # Adjust to match your service port
