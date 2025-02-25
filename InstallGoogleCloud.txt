@@ -3,7 +3,6 @@ gcloud auth login
 
 
 
-
 ------------------------------------------------------running postgres image on kubernetes---------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -116,6 +115,7 @@ kubectl get managedcertificate
 kubectl describe managedcertificate recipe-app-cert
 
 ##################### deploy the  ingress ##########################################
+################## https://cloud.google.com/kubernetes-engine/docs/concepts/ingress ########################
 kubectl apply -f Ingress.yaml 
 kubectl get ingress 
 kubectl describe ingress frontend-recipe-app-ingress
