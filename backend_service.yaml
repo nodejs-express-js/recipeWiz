@@ -9,4 +9,4 @@ spec:
     - protocol: TCP
       port: 80         # Service port
       targetPort: 8080 # Container port where the application is listening
-  type: LoadBalancer   # Change to LoadBalancer if external access is needed
+  type: ClusterIP   # Change to LoadBalancer if external access is needed

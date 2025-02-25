@@ -29,6 +29,18 @@ kubectl apply -f postgres-migration-job.yaml
 ----------------------------pushing backend image to recipe-app repository in Gcloud-------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------
+############################### add health check to app #########################
+Currently, all service backends must satisfy either of the following requirements to pass the
+ HTTP health checks sent to it from the GCE loadbalancer: 1. Respond with a 200 on '/'. The content 
+ does not matter. 2. Expose an arbitrary url as a readiness probe on the pods backing the Service.
+
+app.get('/', (req, res) => {
+    res.sendStatus(200);  // Root health check for load balancer
+  });
+  app.get('/healthz', (req, res) => {
+    res.sendStatus(200);  // Additional readiness probe endpoint
+  });
+
 ################################ set config ##############################
 gcloud config set project stoked-depth-451301-f5
 ############################### build the docker image ##########################
@@ -62,15 +74,7 @@ gcloud compute addresses describe recipe-app --global --format="value(address)"
 ################### connect the domain to ip address ############################
 go to route53 and deploy the (35.244.170.162) to domain
 
-#################### depoly the frontend certificate ###############################
-kubectl apply -f managedcert.yaml
-kubectl get managedcertificate
-kubectl describe managedcertificate recipe-app-cert
 
-##################### deploy the frontend ingress ##########################################
-kubectl apply -f Ingress.yaml 
-kubectl get ingress 
-kubectl describe ingress frontend-recipe-app-ingress
 
 
 
@@ -106,8 +110,12 @@ kubectl apply -f frontend_deployments.yaml
 ############################################# deploy the service #############################################
 kubectl apply -f frontend_service.yaml
 
+#################### depoly the  certificate ###############################
+kubectl apply -f managedcert.yaml
+kubectl get managedcertificate
+kubectl describe managedcertificate recipe-app-cert
 
-
-
-
-
+##################### deploy the  ingress ##########################################
+kubectl apply -f Ingress.yaml 
+kubectl get ingress 
+kubectl describe ingress frontend-recipe-app-ingress
