@@ -1,7 +1,7 @@
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: frontend-recipe-app-cert
+  name: recipe-app-cert
 spec:
   domains:
-    - diningservices.vishalgandla.online  # Replace with your actual domain
+    - recipeshare.vishalgandla.online  # Replace with your actual domain

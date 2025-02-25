@@ -2,6 +2,81 @@
 gcloud auth login 
 
 
+
+
+------------------------------------------------------running postgres image on kubernetes---------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+################################### set the default DNS kubectl to google cloud ####################################
+gcloud container clusters get-credentials recipe-app --region us-east1 --project stoked-depth-451301-f5
+
+#################################### create a postgres database #################################
+kubectl apply -f postgres-pvc.yaml
+kubectl get persistentvolumeclaim
+
+kubectl apply -f postgres-secret.yaml
+kubectl get secret
+
+kubectl apply -f postgres-statefulset.yaml
+kubectl get StatefulSet
+###################deploy database ############################
+kubectl apply -f postgres-service.yaml
+kubectl get services
+############################# migrate the db using job ################################
+kubectl apply -f postgres-migration-job.yaml
+
+
+----------------------------pushing backend image to recipe-app repository in Gcloud-------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+################################ set config ##############################
+gcloud config set project stoked-depth-451301-f5
+############################### build the docker image ##########################
+docker build -t recipe-app-backend .
+################################ tag the docker image #################################
+docker tag recipe-app-backend us-east1-docker.pkg.dev/stoked-depth-451301-f5/recipe-app/recipe-app-backend
+
+############################### push image to gcloud ####################################
+docker push us-east1-docker.pkg.dev/stoked-depth-451301-f5/recipe-app/recipe-app-backend
+
+############################### list and check all the images ################################
+gcloud artifacts docker images list us-east1-docker.pkg.dev/stoked-depth-451301-f5/recipe-app
+
+------------------------------------------------------running backend image on kubernetes---------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+############################################# deploy the pods #############################################
+kubectl apply -f backend_deployments.yaml
+############################################# deploy the service #############################################
+kubectl apply -f backend_service.yaml
+########################################  check the service #############################################
+kubectl port-forward service/backend-recipe-app 8080:80
+
+
+################## deploy ip address for ingress ################################
+gcloud compute addresses create recipe-app --global
+gcloud compute addresses list --global
+gcloud compute addresses describe recipe-app --global --format="value(address)"
+
+
+################### connect the domain to ip address ############################
+go to route53 and deploy the (35.244.170.162) to domain
+
+#################### depoly the frontend certificate ###############################
+kubectl apply -f managedcert.yaml
+kubectl get managedcertificate
+kubectl describe managedcertificate recipe-app-cert
+
+##################### deploy the frontend ingress ##########################################
+kubectl apply -f Ingress.yaml 
+kubectl get ingress 
+kubectl describe ingress frontend-recipe-app-ingress
+
+
+
+
+
+
 ----------------------------pushing frontend image to recipe-app repository in Gcloud-------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------------------------------------------------
@@ -23,7 +98,7 @@ gcloud artifacts docker images list us-east1-docker.pkg.dev/stoked-depth-451301-
 ---------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 ################################### set the default DNS kubectl to google cloud ####################################
-gcloud container clusters get-credentials recipe-app-cluster --region us-east1 --project stoked-depth-451301-f5
+gcloud container clusters get-credentials recipe-app --region us-east1 --project stoked-depth-451301-f5
 
 ############################################# deploy the pods #############################################
 kubectl apply -f frontend_deployments.yaml
@@ -33,38 +108,6 @@ kubectl apply -f frontend_service.yaml
 
 
 
-----------------------------pushing backend image to recipe-app repository in Gcloud-------------------------------------------
---------------------------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------------------------
-################################ set config ##############################
-gcloud config set project stoked-depth-451301-f5
-
-################################ tag the docker image #################################
-docker tag recipe-app us-east1-docker.pkg.dev/stoked-depth-451301-f5/recipe-app/recipe-app-backend
-
-############################### push image to gcloud ####################################
-docker push us-east1-docker.pkg.dev/stoked-depth-451301-f5/recipe-app/recipe-app-backend
-
-############################### list and check all the images ################################
-gcloud artifacts docker images list us-east1-docker.pkg.dev/stoked-depth-451301-f5/recipe-app
 
 
 
-################## deploy ip address for ingress ################################
-gcloud compute addresses create recipe-app --global
-gcloud compute addresses list --global
-gcloud compute addresses describe recipe-app --global --format="value(address)"
-
-
-################### connect the domain to ip address ############################
-go to route53 and deploy the (34.144.222.116) to domain
-
-#################### depoly the certificate ###############################
-kubectl apply -f managedcert.yaml
-kubectl get managedcertificate
-kubectl describe managedcertificate frontend-recipe-app-cert
-
-##################### deploy the ingress ##########################################
-kubectl apply -f Ingress.yaml 
-kubectl get ingress 
-kubectl describe ingress frontend-recipe-app-ingress

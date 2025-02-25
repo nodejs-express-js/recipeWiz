@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-recipe-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend-recipe-app
+  template:
+    metadata:
+      labels:
+        app: backend-recipe-app
+    spec:
+      containers:
+      - name: backend-recipe-app
+        image: us-east1-docker.pkg.dev/stoked-depth-451301-f5/recipe-app/recipe-app-backend  # Replace with your image
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        - name: USER_NAME
+          value: "postgres"
+        - name: PASSWORD
+          value: "Postgresql10071999"
+        - name: HOST
+          value: "postgres"  # Points to the PostgreSQL service in the same namespace
+        - name: DATABASE_NAME
+          value: "production"
+        - name: DIALECT
+          value: "postgres"

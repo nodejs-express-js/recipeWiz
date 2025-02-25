@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sequelize-migration-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: migrate
+        image: us-east1-docker.pkg.dev/stoked-depth-451301-f5/recipe-app/recipe-app-backend
+        command: ["npx", "sequelize-cli", "db:migrate"]
+        env:
+        - name: PORT
+          value: "8080"
+        - name: USER_NAME
+          value: "postgres"
+        - name: PASSWORD
+          value: "Postgresql10071999"
+        - name: HOST
+          value: "postgres"  # Points to the PostgreSQL service in the same namespace
+        - name: DATABASE_NAME
+          value: "production"
+        - name: DIALECT
+          value: "postgres"
+      restartPolicy: Never
+  backoffLimit: 4
