@@ -1,4 +1,1 @@
 # recipeWiz
-# imageWiz
-# imageWiz
-# recipeWiz
